@@ -15,11 +15,11 @@ if NOT "%PAPER%" == "" (
 )
 
 if "%1" == "" goto help
-if "%1" == "check" goto check
 
 if "%1" == "help" (
 	:help
 	echo.Please use `make ^<target^>` where ^<target^> is one of
+	echo.  venv       to create a venv with necessary tools
 	echo.  html       to make standalone HTML files
 	echo.  dirhtml    to make HTML files named index.html in directories
 	echo.  singlehtml to make a single large HTML file
@@ -172,8 +172,14 @@ results in %BUILDDIR%/doctest/output.txt.
 	goto end
 )
 
-:check
-cmd /C %PYTHON% tools\rstlint.py -i tools -i venv
-goto end
+if "%1" == "check" (
+	cmd /C %PYTHON% tools\rstlint.py -i tools -i venv
+	goto end
+)
+
+if "%1" == "venv" (
+	cmd /C %PYTHON% -m venv venv && cmd /C venv\bin\pip install -U Sphinx
+	goto end
+)
 
 :end
